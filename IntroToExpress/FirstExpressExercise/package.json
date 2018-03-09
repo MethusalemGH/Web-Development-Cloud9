@@ -1,0 +1,28 @@
+{
+  "name": "firstexpressexercise",
+  "version": "1.0.0",
+  "description": "Exercise for basic Express routes",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.16.2"
+  },
+  "devDependencies": {
+    "express": "^4.16.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MethusalemGH/web-development-cloud9.git"
+  },
+  "keywords": [
+    "Express"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MethusalemGH/web-development-cloud9/issues"
+  },
+  "homepage": "https://github.com/MethusalemGH/web-development-cloud9#readme"
+}
