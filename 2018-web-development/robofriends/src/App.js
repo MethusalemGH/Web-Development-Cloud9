@@ -1,22 +1,28 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-console.assert(React);
+import React from 'react';
+import Title from './Title';
+import SearchBox from './SearchBox';
+import CardList from './CardList';
 
-
-class App extends Component {
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      filter: '',
+    };
+  }
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div>
+        <Title />
+        <SearchBox searchChange={this.onSearchChange} />
+        <CardList filter={this.state.filter} />
       </div>
     );
+  }
+
+  // Message handlers, need ES6 syntax or the 'this' reference is incorrect
+  onSearchChange = (event) => {
+    this.setState({ filter: event.target.value });
   }
 }
 

@@ -1,0 +1,14 @@
+@font-face {
+  font-family: 'SEGA Logo Font';
+  font-style: normal;
+  font-weight: normal;
+  src: local('SEGA Logo Font'), url('Sega.TTF') format('truetype');
+}
+
+.roboTitle {
+  font-family: SEGA Logo Font;
+  color: #0CCAC4;
+  font-weight: 200;
+  width: 60%;
+  margin: 12px auto;
+}
