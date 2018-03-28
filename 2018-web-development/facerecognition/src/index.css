@@ -1,0 +1,6 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Verdana';
+  background: linear-gradient(to right, rgba(64, 96, 255, 1.0) 0%, rgba(128, 192, 255, 1.0) 100%);
+}
