@@ -12,6 +12,7 @@ import 'tachyons';
 import './App.css';
 
 class App extends React.Component {
+
   constructor() {
     super();
     this.state = {
@@ -21,6 +22,7 @@ class App extends React.Component {
       route: 'signin'
     };
   }
+
   render = () => {
     return (
       <div className = 'App' >
@@ -47,9 +49,18 @@ class App extends React.Component {
     );
   }
 
+  componentDidMount() {
+    window.addEventListener("resize", this.hideFaceBox.bind(this));
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.hideFaceBox.bind(this));
+  }
+
   // Message Handlers
   onInputChange = (event) => {
     this.setState({ input: event.target.value });
+    this.hideFaceBox();
   }
 
   onButtonClick = () => {
@@ -85,6 +96,10 @@ class App extends React.Component {
       const box = this.state.box;
       console.log(`[${index}] top: ${box.top} left: ${box.left} bottom: ${box.bottom} right: ${box.right}`);
     });
+  }
+
+  hideFaceBox = () => {
+    this.setState({ box: { top: 0, left: 0, bottom: 0, right: 0 } });
   }
 }
 
