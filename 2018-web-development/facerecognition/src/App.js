@@ -8,8 +8,12 @@ import Logo from './Components/Logo';
 import Ranking from './Components/Ranking';
 import ImageLinkForm from './Components/ImageLinkForm';
 import FaceRecognition from './Components/ImageRecognition';
+import fetch from 'isomorphic-fetch';
 import 'tachyons';
 import './App.css';
+
+const urlApp = 'http://web-development-cloud9-danilolax.c9users.io';
+const portApp = 8080;
 
 class App extends React.Component {
 
@@ -19,7 +23,18 @@ class App extends React.Component {
       // input: 'https://samples.clarifai.com/face-det.jpg',
       input: 'http://images.indianexpress.com/2016/04/stana-katic-759.jpg',
       box: {},
-      route: 'signin'
+      route: 'signin',
+      connection: {
+        url: urlApp,
+        port: portApp
+      },
+      user: {
+        id: 0,
+        name: '',
+        email: '',
+        entries: 0,
+        joined: {}
+      },
     };
   }
 
@@ -33,16 +48,16 @@ class App extends React.Component {
         </div>
         { this.state.route === 'home'
           ? <div>
-              <Ranking />
+              <Ranking name={this.state.user.name} entries={this.state.user.entries} />
               <ImageLinkForm onInputChange={this.onInputChange} onButtonClick={this.onButtonClick} imageURL={this.state.input} />
               <FaceRecognition imageURL={this.state.input} box={this.state.box} />
             </div>
           : this.state.route === 'signin'
             ? <div>
-                <SignIn onRouteChange={this.onRouteChange} />
+                <SignIn onRouteChange={this.onRouteChange} connection={this.state.connection} loadUser={this.loadUser} />
               </div>
             : <div>
-                <Register onRouteChange={this.onRouteChange} />
+                <Register onRouteChange={this.onRouteChange} connection={this.state.connection} loadUser={this.loadUser} />
               </div>
         }
       </div>
@@ -51,6 +66,11 @@ class App extends React.Component {
 
   componentDidMount() {
     window.addEventListener("resize", this.hideFaceBox.bind(this));
+
+    const connection = this.state.connection;
+    fetch(`${connection.url}:${connection.port}`)
+      .then((response) => response.json())
+      .then((data) => console.log(data));
   }
 
   componentWillUnmount() {
@@ -67,7 +87,24 @@ class App extends React.Component {
     const app = new Clarifai.App({ apiKey: 'cd21979a4dad41eb9f0a4e6eff58d4ab' });
 
     app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
-      .then(response => this.displayFaceBox(this.calculateFaceLocation(response.outputs["0"].data.regions[0])))
+      .then(response => {
+        if (response !== null) {
+          fetch(`${this.state.connection.url}:${this.state.connection.port}/image`, {
+              method: 'put',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                id: this.state.user.id
+              })
+            })
+            .then((response) => response.json())
+            .then((entries) => {
+              console.log(entries);
+              this.setState(Object.assign(this.state.user, { entries: entries }));
+            });
+        }
+        this.displayFaceBox(this.calculateFaceLocation(response.outputs["0"].data.regions[0]));
+      })
+
       .catch(err => console.log(err));
   }
 
@@ -100,6 +137,10 @@ class App extends React.Component {
 
   hideFaceBox = () => {
     this.setState({ box: { top: 0, left: 0, bottom: 0, right: 0 } });
+  }
+
+  loadUser = (user) => {
+    this.setState({ user: user });
   }
 }
 

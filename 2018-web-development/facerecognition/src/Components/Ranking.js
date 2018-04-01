@@ -5,10 +5,10 @@ class Ranking extends React.Component {
     return (
       <div className='pb4 ph2'>
         <div className='RankHeading f3'>
-          {'<User>, your current ranking is ...'}
+          {`${this.props.name}, your current number of entries is ...`}
         </div>
-        <div className='Ranking f2'>
-          {'#<Rank>'}
+        <div className='Ranking f3'>
+          {`${this.props.entries}`}
         </div>
       </div>
     );
