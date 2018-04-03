@@ -1,0 +1,20 @@
+{
+  "name": "ejsdemo",
+  "version": "1.0.0",
+  "description": "Using EJS templates",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Danilo Lax",
+  "license": "ISC",
+  "dependencies": {
+    "e": "0.0.4",
+    "ejs": "^2.5.8",
+    "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.3"
+  }
+}
