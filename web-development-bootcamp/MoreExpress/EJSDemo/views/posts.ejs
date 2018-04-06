@@ -1,0 +1,8 @@
+<% include ./partials/header %>
+<h1> The Posts Page</h1>
+
+<% posts.forEach(post => { %>
+  <p><strong>Title:</strong> <%= post.title %><br>
+  Author: <%= post.author %></p>
+<% }) %>
+<% include ./partials/header %>
