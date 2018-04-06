@@ -1,0 +1,7 @@
+<% include ./partials/header %>
+<h1>We just recieved a message from <%= targetVar %>!</h1>
+
+<% if (targetVar.toLowerCase() === 'bobby') { %>
+  <p>... and <%= targetVar %> is ignoring you.</p>
+<% } %>
+<% include ./partials/footer %>
