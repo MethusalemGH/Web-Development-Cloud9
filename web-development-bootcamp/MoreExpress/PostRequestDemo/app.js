@@ -6,8 +6,7 @@ app.use(parser.urlencoded({ extended: true }));
 app.use(express.static(`public`));
 app.set(`view engine`, `ejs`);
 
-const friends = [`Cherish`, `Milissa`, `Nova`, `Shelton`, `Lashon`, `Melva`,
-                  `Brant`, `Donte`, `Lorretta`, `Ronald`];
+const friends = [`Cherish`, `Milissa`, `Nova`, `Shelton`, `Lashon`];
 
 // "/"    => `Server is running ...`
 app.get(`/`, (req, res) => {
@@ -21,6 +20,7 @@ app.get(`/friends`, (req, res) => {
   res.render(`friends`, { friends: friends });
 });
 
+// "/addFriend"    => Add new friend to the list
 app.post(`/addFriend`, (req, res) => {
   friends.push(req.body.friend);
   res.redirect(`/friends`);
