@@ -1,0 +1,11 @@
+.header>.icon {
+  font-size: 1.5em;
+}
+
+.container.main {
+  margin-top: 5em;
+}
+
+.inline-form {
+  display: inline;
+}
