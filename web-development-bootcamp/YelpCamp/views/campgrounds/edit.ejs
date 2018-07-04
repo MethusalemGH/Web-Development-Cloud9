@@ -1,0 +1,21 @@
+<% include ../partials/header %>
+
+<div class = 'container'>
+
+  <header class = 'jumbotron' style = 'padding-bottom: 4rem'>
+    <h1>Edit Campground</h1>
+
+    <div class = 'row'>
+      <form class = 'col-lg-8 col-md-10 p-3' action = '/campgrounds/<%= campground._id %>?_method=PUT' method = 'POST'>
+        <input class = 'form-control mb-3' type = 'text' name = 'campground[name]' value = '<%= campground.name %>' placeholder = 'Campground Name ...'>
+        <input class = 'form-control mb-3' type = 'text' name = 'campground[imageURL]' value = '<%= campground.imageURL %>' placeholder = 'Image URL ...'>
+        <textarea class = 'form-control h-50 mb-3' name = 'campground[description]' placeholder = 'Campground description ...'><%= campground.description %></textarea>
+        <input class = 'btn btn-primary col-md-6' type = 'submit' value = 'Edit Campground' class = 'btn btn-primary'>
+        <a class = 'float-right mt-2' href = '/campgrounds'>View Campgrounds</a>
+      </form>
+    </div>
+  </header>
+
+</div>
+
+<% include ../partials/footer %>

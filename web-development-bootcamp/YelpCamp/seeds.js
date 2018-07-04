@@ -37,20 +37,23 @@ const campgroundData = [
   }
 ];
 
-const commentData = [
-  {
-    author: `Bart`,
-    text: `Aren’t we forgetting the true meaning of Christmas: the birth of Santa.`
-  },
-  {
-    author: `Homer`,
-    text: `Just because I don’t care doesn’t mean that I don’t understand.`
-  },
-  {
-    author: `Lisa`,
-    text: `I’ d be mortified if someone ever made a lousy product with the Simpson name on it.`
-  }
-];
+// Random comments:
+// =========================================
+// I don't have an attitude problem. You have a perception problem.
+// Who says nothing is impossible? I've been doing nothing for years.
+// All men make mistakes, but married men find out about them sooner.
+// Education is going to college to learn to express your ignorance in scientific terms.
+// Some people can tell what time it is by looking at the sun. But I have never been able to make out the numbers.
+// Light travels faster than sound. This is why some people appear bright until you hear them speak.
+// The world is filled with willing people; some willing to work, the rest willing to let them.
+// I've learned that we are responsible for what we do, unless we are celebrities or politicians.
+// Optimists say the glass is half-full, Pessimists say the glass is half empty, I says it's time for a beer run.
+// A good scapegoat is nearly as welcome as a solution to the problem.
+
+
+// The following two lines will initialize the DB records when added to app.js
+// const seedDB = require(`./seeds`);
+// seedDB();
 
 function seedDB() {
   // Remove all existing campgrounds from DB
@@ -69,33 +72,6 @@ function seedDB() {
           }
           else {
             console.log(`Added new campground. Id = ${campground._id}`);
-
-            // Create a comment for the campground ... always the same
-            Comment.create({
-              text: `Aren’t we forgetting the true meaning of Christmas: the birth of Santa.`,
-              author: `Bart`
-            }, (err, comment) => {
-              if (err) {
-                console.log(err);
-              }
-              else {
-                console.log(`   added comment. Id = ${comment._id}`);
-                campground.comments.push(comment);
-                Comment.create({
-                  author: `Homer`,
-                  text: `Just because I don’t care doesn’t mean that I don’t understand.`
-                }, (err, comment) => {
-                  if (err) {
-                    console.log(err);
-                  }
-                  else {
-                    console.log(`   added comment. Id = ${comment._id}`);
-                    campground.comments.push(comment);
-                    campground.save();
-                  }
-                });
-              }
-            });
           }
         });
       });

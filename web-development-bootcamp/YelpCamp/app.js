@@ -1,121 +1,50 @@
-const express = require(`express`);
+const methodOverride = require(`method-override`);
+const localStrategy = require(`passport-local`);
+const flash = require(`connect-flash`);
 const parser = require(`body-parser`);
 const mongoose = require(`mongoose`);
+const passport = require(`passport`);
+const express = require(`express`);
 const app = express();
 
 mongoose.connect(`mongodb://localhost/yelpCamp`);
 app.use(parser.urlencoded({ extended: true }));
+app.use(methodOverride(`_method`));
 app.use(express.static(`public`));
 app.set(`view engine`, `ejs`);
 
-const Campground = require(`./models/campground`);
-const Comment = require(`./models/comment`);
-console.assert(Comment);
+app.use(flash());
 
-// The following two lines will initialize the DB records
-// Can be removed if the DB structure hasn't changed
-// const seedDB = require(`./seeds`);
-// seedDB();
+const campgroundRoutes = require(`./routes/campgrounds`);
+const commentRoutes = require(`./routes/comments`);
+const indexRoutes = require(`./routes/index`);
+const userRoutes = require(`./routes/users`);
 
-//////////////////////////////////////////////////////////////////
-// Campgrounds Routes
-//////////////////////////////////////////////////////////////////
+// Set up authentication
+const User = require(`./models/user`);
+app.use(require(`express-session`)({
+  secret: `Why would I tell you my secrets?`,
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize()); // Has to be AFTER require(`express-session`)
+app.use(passport.session());
+passport.use(new localStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
-// Index	/campgrounds	GET	List all campgrounds	Campground.find()
-app.get(`/`, (req, res) => {
-  console.assert(req); // unreferenced parameter
-  res.redirect(`/campgrounds`);
+// Middleware to always have currentUser available in all views
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  res.locals.error = req.flash(`error`);
+  res.locals.success = req.flash(`success`);
+  next();
 });
 
-// Index	/campgrounds	GET	List all campgrounds	Campground.find()
-app.get(`/campgrounds`, (req, res) => {
-  console.assert(req); // unreferenced parameter
-  Campground.find({}, (err, campgrounds) => {
-    if (err) {
-      console.log(err);
-    }
-    else {
-      res.render(`./campgrounds/index`, { campgrounds: campgrounds });
-    }
-  });
-});
-
-// New	/campgrounds/new	GET	Show new Campground form	N/A
-app.get(`/campgrounds/new`, (req, res) => {
-  console.assert(req); // unreferenced parameter
-  res.render(`./campgrounds/new`);
-});
-
-// Create	/campgrounds	POST	Create a new Campground, then redirect somewhere	Campground.create()
-app.post(`/campgrounds`, (req, res) => {
-  const name = req.body.name;
-  const imageURL = req.body.imageURL;
-  const description = req.body.description;
-
-  const newCampground = { name: name, imageURL: imageURL, description: description };
-  Campground.create(newCampground, (err) => {
-    if (err) {
-      console.log(err);
-    }
-    else {
-      res.redirect(`/campgrounds`);
-    }
-  });
-});
-
-// Show	/campgrounds/:id	GET	Show info about one specific Campground	Campground.findById()
-app.get(`/campgrounds/:id`, (req, res) => {
-  console.assert(req); // unreferenced parameter
-  Campground.findById(req.params.id).populate(`comments`).exec((err, campground) => {
-    if (err) {
-      console.log(err);
-    }
-    else {
-      res.render(`./campgrounds/show`, { campground: campground });
-    }
-  });
-});
-
-//////////////////////////////////////////////////////////////////
-// Comments Routes
-//////////////////////////////////////////////////////////////////
-
-// New	/campgrounds/:id/comments/new	GET	Show new Comments form	N/A
-app.get(`/campgrounds/:id/comments/new`, (req, res) => {
-  Campground.findById(req.params.id, (err, campground) => {
-    if (err) {
-      console.log(err);
-    }
-    else {
-      res.render(`./comments/new`, { campground: campground });
-    }
-  });
-});
-
-// Create	/campgrounds/:id/comments	POST	Create a new Comment, then redirect somewhere	Comment.create()
-app.post(`/campgrounds/:id/comments`, (req, res) => {
-  // Look up campground from ID
-  Campground.findById(req.params.id, (err, campground) => {
-    if (err) {
-      console.log(err);
-    }
-    else {
-      // Create new comment
-      Comment.create(req.body.comment, (err, comment) => {
-        if (err) {
-          console.log(err);
-        }
-        else {
-          campground.comments.push(comment);
-          campground.save();
-
-          res.redirect(`/campgrounds/${campground._id}`);
-        }
-      });
-    }
-  });
-});
-
+app.use(`/campgrounds`, campgroundRoutes);
+app.use(`/campgrounds/:id/comments`, commentRoutes);
+app.use(`/`, indexRoutes);
+app.use(`/`, userRoutes);
 
 // Tell Express to listen for requests (start server)
 app.listen(process.env.PORT, process.env.IP, () => {
