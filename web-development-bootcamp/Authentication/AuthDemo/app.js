@@ -1,11 +1,9 @@
-const passportLocalMongoose = require(`passport-local-mongoose`);
 const localStrategy = require(`passport-local`);
 const parser = require(`body-parser`);
 const mongoose = require(`mongoose`);
 const passport = require(`passport`);
 const express = require(`express`);
 const app = express();
-console.assert(passportLocalMongoose);
 
 mongoose.connect(`mongodb://localhost/AuthDemo`);
 app.use(parser.urlencoded({ extended: true }));
@@ -35,6 +33,13 @@ const isLoggedIn = (req, res, next) => {
   }
   res.redirect(`/login`);
 };
+
+// Middleware to always have currentUser available in all views
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  next();
+});
+
 
 // Index	/authentication	GET	Show Index page
 app.get(`/`, (req, res) => {

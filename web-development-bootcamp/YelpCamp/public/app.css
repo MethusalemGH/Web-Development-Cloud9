@@ -7,3 +7,10 @@
   min-height: 100%;
   border: 1px solid rgb(0, 123, 255);
 }
+
+.btn-xs {
+  padding: .1rem .2rem;
+  font-size: 0.8rem;
+  line-height: 1.25;
+  border-radius: .2rem;
+}
