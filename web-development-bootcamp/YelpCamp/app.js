@@ -7,7 +7,8 @@ const passport = require(`passport`);
 const express = require(`express`);
 const app = express();
 
-mongoose.connect(`mongodb://localhost/yelpCamp`);
+//// mongoose.connect(`mongodb://localhost/yelpCamp`);
+mongoose.connect(`mongodb://user:yelpcamp0514@ds127841.mlab.com:27841/wdbc_yelpcamp`);
 app.use(parser.urlencoded({ extended: true }));
 app.use(methodOverride(`_method`));
 app.use(express.static(`public`));
